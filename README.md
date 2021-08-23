@@ -120,6 +120,27 @@ dispatcher.use(async (ctx, next) => {
 })
 ```
 
+### 提前终止
+
+若需要终止当前及后续中间件的执行，只需要抛出错误即可。
+
+```ts
+dispatcher.use(async (ctx, next) => {
+  if(ctx.req[0] === null) {
+    // 使用 throw
+    throw Error('参数不能为 null')
+
+    // 或者使用 reject
+    // return Promise.reject(Error('参数不能为 null'))
+  }
+  await next()
+})
+
+dispatcher(null).then(() => {}, (err) => {
+  console.log(err.message) // 参数不能为 null
+})
+```
+
 ### 示例
 
 #### 基本用法
