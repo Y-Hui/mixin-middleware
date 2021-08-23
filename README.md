@@ -2,6 +2,16 @@
 
 包装指定函数并为其添加类 koa 洋葱机制的中间件支持。
 
+### 安装
+
+```bash
+yarn add action-middleware
+
+# 或者使用 npm
+
+npm install action-middleware
+```
+
 ### 起步
 
 使用 `createActionMiddleware` 创建一个实例，它接收一个函数，内部会对此函数进行包装。
