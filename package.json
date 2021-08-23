@@ -1,12 +1,13 @@
 {
   "private": false,
   "name": "action-middleware",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Add middleware support for function calls.",
   "main": "dist/index.umd.js",
   "module": "dist/index.js",
   "author": "Y-Hui <y-hui.mail@foxmail.com>",
   "license": "MIT",
+  "homepage": "https://github.com/Y-Hui/action-middleware",
   "keywords": [
     "middleware",
     "compose",
