@@ -1,5 +1,5 @@
-import createActionMiddleware from './flow'
+import mixin from './flow'
 
-export default createActionMiddleware
+export default mixin
 
 export type { Context, Middleware, Next, ScopedMiddlewareType } from './flow'

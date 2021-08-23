@@ -17,41 +17,37 @@ export type Next = () => Promise<never>
 
 export type Middleware<Ctx> = (context: Ctx, next: Next) => void
 
-function createActionMiddleware<T extends noop>(fetcher: T) {
-  if (typeof fetcher !== 'function') {
-    throw TypeError('`fetcher` must be a funtion.')
+function mixin<T extends noop>(action: T) {
+  if (typeof action !== 'function') {
+    throw TypeError('`action` must be a funtion.')
   }
 
-  type FetcherOptions = Parameters<T>
-  type FetcherResult = Unpromise<ReturnType<T>>
-  type ContentType = Context<FetcherOptions, FetcherResult>
+  type ActionOptions = Parameters<T>
+  type ActionResult = Unpromise<ReturnType<T>>
+  type ContentType = Context<ActionOptions, ActionResult>
   type MiddlewareType = Middleware<ContentType>
 
   const globalMiddleware: MiddlewareType[] = []
 
   // 执行中间件和 fetcher 函数
-  const call = async <Result = FetcherResult>(
+  const call = async <Result = ActionResult>(
     middleware: MiddlewareType[],
-    options: FetcherOptions,
+    options: ActionOptions,
   ): Promise<Result> => {
     // 中间件上下文
     const context: ContentType = {
       req: options,
       res: undefined,
-      setRes: (action) => {
-        if (typeof action === 'function') {
-          context.res = action(context.res)
-          return
-        }
-        context.res = action as never
+      setRes: (value) => {
+        context.res = value as never
       },
     }
     const flow = compose(middleware)
     try {
       await flow(context, async () => {
         try {
-          const res = await Promise.resolve(fetcher(...context.req))
-          context.res = res as FetcherResult
+          const res = await Promise.resolve(action(...context.req))
+          context.res = res as ActionResult
           return Promise.resolve()
         } catch (error) {
           return Promise.reject(error)
@@ -63,7 +59,7 @@ function createActionMiddleware<T extends noop>(fetcher: T) {
     }
   }
 
-  const flow = <Result = FetcherResult>(...options: FetcherOptions) =>
+  const flow = <Result = ActionResult>(...options: ActionOptions) =>
     call<Result>(globalMiddleware, options)
 
   // 注册中间件
@@ -75,7 +71,7 @@ function createActionMiddleware<T extends noop>(fetcher: T) {
   flow.create = () => {
     const scopedMiddleware: MiddlewareType[] = [...globalMiddleware]
 
-    const callback = <Result = FetcherResult>(...options: FetcherOptions) =>
+    const callback = <Result = ActionResult>(...options: ActionOptions) =>
       call<Result>(scopedMiddleware, options)
 
     // 注册局部中间件
@@ -95,4 +91,4 @@ function createActionMiddleware<T extends noop>(fetcher: T) {
   return flow
 }
 
-export default createActionMiddleware
+export default mixin

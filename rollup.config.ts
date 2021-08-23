@@ -18,7 +18,7 @@ export default [
     output: [
       {
         file: pkg.main,
-        name: 'createFlowRequest',
+        name: 'mixinMiddleware',
         format: 'umd',
         sourcemap: false,
       },

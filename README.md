@@ -1,30 +1,30 @@
-## action-middleware
+## mixin-middleware
 
 包装指定函数并为其添加类 koa 洋葱机制的中间件支持。
 
 ### 安装
 
 ```bash
-yarn add action-middleware
+yarn add mixin-middleware
 
 # 或者使用 npm
 
-npm install action-middleware
+npm install mixin-middleware
 ```
 
 ### 起步
 
-使用 `createActionMiddleware` 创建一个实例，它接收一个函数，内部会对此函数进行包装。
+使用 `mixin` 创建一个实例，它接收一个函数，内部会对此函数进行包装。
 
 > 为行文方便，后文统一使用 `action` 称呼。
 
 ```ts
-import createActionMiddleware from 'action-middleware'
+import mixin from 'mixin-middleware'
 
 const action = (params) => {/* 省略实现过程 */}
 
 // dispatcher 实例
-const dispatcher = createActionMiddleware(action)
+const dispatcher = mixin(action)
 ```
 
 #### 调用 dispatcher
@@ -69,7 +69,7 @@ scopeDispatcher({/* some params */}).then((res) => {
 })
 ```
 
-`action-middleware` 内部使用数组存储中间件，`prefix` 注册中间件时会插入到数组前面，`suffix` 注册中间件时会插入到数组后面。
+`mixin-middleware` 内部使用数组存储中间件，`prefix` 注册中间件时会插入到数组前面，`suffix` 注册中间件时会插入到数组后面。
 
 ### 中间件的执行顺序
 
@@ -125,7 +125,7 @@ dispatcher.use(async (ctx, next) => {
 #### 基本用法
 
 ```ts
-import createActionMiddleware from 'action-middleware'
+import mixin from 'mixin-middleware'
 
 function add(...numberList: number[]) {
   return numberList.reduce((res, item) => {
@@ -136,7 +136,7 @@ function add(...numberList: number[]) {
   })
 }
 
-const dispatcher = createActionMiddleware(add)
+const dispatcher = mixin(add)
 
 // 注册中间件。
 // 过滤非 number 类型值
@@ -165,11 +165,11 @@ dispatcher(1, '', null, 2, 3).then((res) => {
 #### 接口请求
 
 ```ts
-import createActionMiddleware from 'action-middleware'
+import mixin from 'mixin-middleware'
 
 const ajax = (params) => {/* 省略实现代码 */}
 
-const request = createActionMiddleware(ajax)
+const request = mixin(ajax)
 
 // 注册实例中间件
 // 处理 url 前缀的中间件
@@ -201,5 +201,5 @@ request({ url: '/fake-url' }).then(
 
 ### 杂项
 
-洋葱中间件是面向切面（AOP）的，因此 `action-middleware` 的适用范围很广，期待你使用它做出一些非常棒的东西。
+洋葱中间件是面向切面（AOP）的，因此 `mixin-middleware` 的适用范围很广，期待你使用它做出一些非常棒的东西。
 
