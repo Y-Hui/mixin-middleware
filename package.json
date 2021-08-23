@@ -1,0 +1,46 @@
+{
+  "private": false,
+  "name": "action-middleware",
+  "version": "0.0.0",
+  "description": "Add middleware support for function calls.",
+  "main": "dist/index.umd.js",
+  "module": "dist/index.js",
+  "author": "Y-Hui <y-hui.mail@foxmail.com>",
+  "license": "MIT",
+  "keywords": [
+    "middleware",
+    "compose",
+    "request"
+  ],
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc --module commonjs && cross-env NODE_ENV=production rollup -c rollup.config.ts"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.28.0",
+    "@typescript-eslint/parser": "^4.28.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^7.29.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-import-resolver-typescript": "^2.4.0",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
+    "prettier": "^2.3.2",
+    "rollup": "^2.52.3",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-dts": "^3.0.2",
+    "rollup-plugin-generate-html-template": "^1.7.0",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-livereload": "^2.0.2",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-serve": "^1.1.0",
+    "rollup-plugin-sourcemaps": "^0.6.3",
+    "rollup-plugin-typescript2": "^0.30.0",
+    "typedoc": "^0.21.2",
+    "typescript": "^4.3.4"
+  }
+}
