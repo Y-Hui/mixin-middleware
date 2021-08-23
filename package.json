@@ -5,6 +5,7 @@
   "description": "Add middleware support for function calls.",
   "main": "dist/index.umd.js",
   "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "author": "Y-Hui <y-hui.mail@foxmail.com>",
   "license": "MIT",
   "homepage": "https://github.com/Y-Hui/mixin-middleware",
