@@ -1,7 +1,7 @@
 {
   "private": false,
   "name": "mixin-middleware",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Add middleware support for function calls.",
   "main": "dist/index.umd.js",
   "module": "dist/index.js",
