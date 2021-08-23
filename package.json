@@ -13,7 +13,9 @@
     "request"
   ],
   "files": [
-    "dist"
+    "LICENSE",
+    "README.md",
+    "dist/"
   ],
   "scripts": {
     "build": "tsc --module commonjs && cross-env NODE_ENV=production rollup -c rollup.config.ts"
