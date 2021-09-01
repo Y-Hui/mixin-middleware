@@ -24,7 +24,7 @@ import mixin from 'mixin-middleware'
 const action = (params) => {/* 省略实现过程 */}
 
 // dispatcher 实例
-const dispatcher = mixin(action)
+const dispatcher = mixin({ action })
 ```
 
 #### 调用 dispatcher
@@ -136,9 +136,39 @@ dispatcher.use(async (ctx, next) => {
   await next()
 })
 
-dispatcher(null).then(() => {}, (err) => {
+dispatcher(null).then(() => {}).catch((err) => {
   console.log(err.message) // 参数不能为 null
 })
+```
+
+### 统一错误处理
+
+洋葱中间件确实很强大，但是我们似乎缺少了一个环节，如果 action 本身抛出错误如何处理？
+
+那么接下来来看看 `errorHandler`。
+
+```ts
+import mixin from 'mixin-middleware'
+
+const action = (params) => {/* 省略实现过程 */}
+
+// dispatcher 实例
+const dispatcher = mixin({
+  action,
+  errorHandler(err) {
+    // err 为中间件、action 所抛出的错误
+    // 如果有需要，则在此对错误进行处理
+    
+    // 无法处理，或需要在调用处处理的错误则依旧抛出。
+    throw err
+  },
+})
+
+dispatcher({/* some params */})
+  .then(() => {})
+  .catch((err) => {
+  	// 通过 Promise.catch 做错误处理
+	})
 ```
 
 ### 示例
@@ -190,7 +220,7 @@ import mixin from 'mixin-middleware'
 
 const ajax = (params) => {/* 省略实现代码 */}
 
-const request = mixin(ajax)
+const request = mixin({ action: ajax })
 
 // 注册实例中间件
 // 处理 url 前缀的中间件
@@ -210,14 +240,29 @@ request.use(async (ctx, next) => {
 })
 
 // 发起请求
-request({ url: '/fake-url' }).then(
-  (res) => {
+request({ url: '/fake-url' })
+  .then((res) => {
     // 业务代码
-  },
-  (error) => {
+  }).catch((error) => {
     // 处理错误
-  },
-)
+  })
+```
+
+### 函数签名
+
+```ts
+type NOOP = (...args: never[]) => unknown
+
+interface MixinOptions<T = NOOP> {
+  /**
+   * 需要包装的函数
+   */
+  action: T
+  /**
+   * 统一错误处理
+   */
+  errorHandler?: (error: unknown) => void
+}
 ```
 
 ### 杂项

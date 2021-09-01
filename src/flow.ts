@@ -17,7 +17,19 @@ export type Next = () => Promise<never>
 
 export type Middleware<Ctx> = (context: Ctx, next: Next) => void
 
-function mixin<T extends noop>(action: T) {
+interface MixinOptions<T> {
+  /**
+   * 需要包装的函数
+   */
+  action: T
+  /**
+   * 统一错误处理
+   */
+  errorHandler?: (error: unknown) => void
+}
+
+function mixin<T extends noop>(mixinOptions: MixinOptions<T>) {
+  const { action, errorHandler } = mixinOptions
   if (typeof action !== 'function') {
     throw TypeError('`action` must be a funtion.')
   }
@@ -55,6 +67,13 @@ function mixin<T extends noop>(action: T) {
       })
       return Promise.resolve(context.res as Result)
     } catch (error) {
+      if (typeof errorHandler === 'function') {
+        try {
+          errorHandler(error)
+        } catch (err) {
+          return Promise.reject(err)
+        }
+      }
       return Promise.reject(error)
     }
   }
